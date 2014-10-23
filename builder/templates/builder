@@ -130,18 +130,6 @@ if [ ! -f Dockerfile ]; then
     docker cp $JOB:/tmp/slug.tgz .
     # copy over the Dockerfile shim to the build dir
     cp $DOCKERFILE_SHIM ./Dockerfile
-else
-    
-    # add config to existing Dockerfile
-    CONFIG=$(echo $RESPONSE | jq -r ".values|to_entries|map(\"ENV \(.key) \(.value|tostring)\")|.[]" 2> /dev/null || echo $RESPONSE)
-    if [ "$CONFIG" == "$RESPONSE" ];
-    then
-        puts-warn "failed retrieving config from controller"
-        puts-warn $RESPONSE
-        exit 1
-    fi
-
-    echo "$CONFIG" >> Dockerfile
 fi
 
 # inject builder-specific environment variables into the application environment
