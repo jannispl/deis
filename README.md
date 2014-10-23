@@ -3,11 +3,11 @@
 Deis (pronounced DAY-iss) is an open source PaaS that makes it easy to deploy and manage applications on your own servers. Deis builds upon [Docker](http://docker.io/) and [CoreOS](http://coreos.com) to provide a lightweight PaaS with a [Heroku-inspired](http://heroku.com) workflow.
 
 [![Build Status](http://ci.deis.io/buildStatus/icon?job=test-master)](http://ci.deis.io/job/test-master/)
-[![Current Release](http://img.shields.io/badge/release-v0.14.0-blue.svg)](https://github.com/deis/deis/releases/tag/v0.14.0)
+[![Current Release](http://img.shields.io/badge/release-v0.14.1-blue.svg)](https://github.com/deis/deis/releases/tag/v0.14.1)
 
 ![Deis Graphic](https://s3-us-west-2.amazonaws.com/deis-images/deis-graphic.png)
 
-Deis is pre-release software. The current release is [v0.14.0](https://github.com/deis/deis/tree/v0.14.0). Until there is a stable release, we recommend you check out the latest ["master" branch](https://github.com/deis/deis) code and refer to the [latest documentation](http://docs.deis.io/en/latest/).  Upgrading from a previous Deis release? See [Upgrading Deis](http://docs.deis.io/en/latest/installing_deis/upgrading-deis/) for additional information.
+Deis is pre-release software. The current release is [v0.14.1](https://github.com/deis/deis/tree/v0.14.1). Until there is a stable release, we recommend you check out the latest ["master" branch](https://github.com/deis/deis) code and refer to the [latest documentation](http://docs.deis.io/en/latest/).  Upgrading from a previous Deis release? See [Upgrading Deis](http://docs.deis.io/en/latest/installing_deis/upgrading-deis/) for additional information.
 
 # Deploying Deis
 
@@ -50,6 +50,22 @@ This instructs Vagrant to spin up 3 VMs. To be able to connect to the VMs, you m
 $ ssh-add ~/.vagrant.d/insecure_private_key
 ```
 
+## Configure Deis
+
+Before Deis will start successfully, there are a few administrative settings we need to provide.
+
+Set the default domain used to anchor your applications.  For a Vagrant environment, use `local3.deisapp.com` as it will resolve to your local routers:
+
+```console
+$ deisctl config platform set domain=local3.deisapp.com
+```
+
+If you want to allow `deis run` for one-off admin commands, you must provide an SSH private key that allows Deis to gather container logs on CoreOS hosts:
+
+```console
+$ deisctl config platform set sshPrivateKey=~/.vagrant.d/insecure_private_key
+```
+
 ## Provision Deis
 
 Install the [deisctl utility](deisctl#installation) used to provision and operate Deis.
@@ -74,22 +90,6 @@ $ deisctl start platform
 This can take some time - the **builder** must download and install the beefy Heroku cedar stack.  Grab some more coffee!
 
 Your Deis platform should be accessible at `deis.local3.deisapp.com`.  For clusters on other platforms see our guide to [Configuring DNS](http://docs.deis.io/en/latest/installing_deis/configure-dns/).
-
-## Configure Deis
-
-Now that Deis is running there are a few administrative settings we need to provide.
-
-Set the default domain used to anchor your applications.  For a Vagrant environment, use `local3.deisapp.com` as it will resolve to your local routers:
-
-```console
-$ deisctl config platform set domain=local3.deisapp.com
-```
-
-If you want to allow `deis run` for one-off admin commands, you must provide an SSH private key that allows Deis to gather container logs on CoreOS hosts:
-
-```console
-$ deisctl config platform set sshPrivateKey=~/.vagrant.d/insecure_private_key
-```
 
 ## Install the Deis Client
 
